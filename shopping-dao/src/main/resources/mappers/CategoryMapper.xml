@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nf.dao.CategoryDao">
+
+    <select id="categoryList" resultType="com.nf.entity.Category">
+     select pk_id as id, category_name as categoryName,
+     parent_id as parentId, is_parent as isParent, sort
+     from tb_category
+     order by pk_id
+    </select>
+
+    <select id="categoryListByName" resultType="com.nf.entity.Category">
+        select pk_id as id, category_name as categoryName,
+        parent_id as parentId, is_parent as isParent, sort
+        from tb_category
+        <where>
+            <if test="categoryName != null">
+                category_name like "%"#{categoryName}"%"
+                order by pk_id
+            </if>
+        </where>
+    </select>
+    <!--   插入记录时的一个通常的案例是:插入的同时获取自动生成的值
+            并把获取的值赋值给实体类的某一个属性
+            keyProperty = 实体类的某一个属性的名字-->
+    <insert id="insertCategory" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_category(category_name,parent_id,is_parent,sort) values
+        (#{categoryName},#{parentId},#{isParent},#{sort})
+    </insert>
+
+    <delete id="deleteCategoryById">
+       delete from tb_category where pk_id = #{id}
+    </delete>
+
+    <update id="updateCategoryById">
+        update tb_category set category_name=#{categoryName},
+        parent_id=#{parentId},is_parent=#{isParent},sort=#{sort}
+        where pk_id=#{id}
+    </update>
+</mapper>

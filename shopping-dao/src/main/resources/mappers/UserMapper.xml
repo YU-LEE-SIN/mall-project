@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nf.dao.UserDao">
+    <select id="queryUser" resultType="com.nf.entity.User">
+       select id, username, password
+        from tb_user
+        where username = #{username}
+        and password = #{password}
+    </select>
+    
+    <select id="checkUsername" resultType="com.nf.entity.User">
+        select id, username, password
+        from tb_user
+        where username = #{username}
+    </select>
+
+    <insert id="insertUser" parameterType="com.nf.entity.User">
+        insert into tb_user(username, password, phone)
+         values(#{username},#{password},#{phone});
+    </insert>
+
+    <select id="AllUser" resultType="com.nf.entity.User">
+         select id, username, password
+        from tb_user
+    </select>
+    <delete id="delUserById">
+        delete  from tb_user where id=#{id}
+    </delete>
+</mapper>

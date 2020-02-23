@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nf.dao.TbSkuDao">
+    <insert id="insertTbSku" parameterType="com.nf.entity.TbSku">
+            insert into tb_sku
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="spuId != null" >
+                spu_id,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="images != null" >
+                images,
+            </if>
+                price,
+            <if test="spec != null" >
+                own_spec,
+            </if>
+                stock,
+                is_enable,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="spuId != null" >
+                #{spuId},
+            </if>
+            <if test="title != null" >
+                #{title},
+            </if>
+            <if test="images != null" >
+                #{images},
+            </if>
+            #{price},
+            <if test="spec != null" >
+                #{spec},
+            </if>
+                #{stock},#{isEnable}
+        </trim>
+    </insert>
+    <delete id="deleteSkuById" >
+         delete from tb_sku where pk_id = #{id}
+    </delete>
+
+    <update id="updateSkyById">
+       update tb_sku set spu_id=#{spuId},
+                   title=#{title},
+            <if test="images!=null">
+                       images=#{images},
+            </if>
+            <if test="price!=null">
+                      price=#{price},
+            </if>
+            <if test="spec!=null">
+                      own_spec=#{spec},
+            </if>
+            <if test="stock!=null">
+                      stock=#{stock},
+            </if>
+            <if test="isEnable!=null">
+                      is_enable=#{isEnable}
+            </if>
+                   where pk_id=#{id}
+    </update>
+
+    <select id="skuListBySpuId" resultType="com.nf.entity.TbSku">
+        select pk_id as id, spu_id as spuId, title, images, price,
+        own_spec as spec, stock, is_enable as enable,
+         create_time as createTime, last_update_time
+         from tb_sku where spu_id=#{spuId}
+    </select>
+
+    <select id="skuList" resultType="com.nf.entity.TbSku">
+        select pk_id as id, spu_id as spuId, title, images, price,
+        own_spec as spec, stock, is_enable as enable,
+         create_time as createTime, last_update_time
+         from tb_sku order by pk_id
+    </select>
+
+    <select id="skuListById" resultType="com.nf.entity.TbSku">
+        select pk_id as id, spu_id as spuId, title, images, price,
+        own_spec as spec, stock, is_enable as enable,
+         create_time as createTime, last_update_time
+         from tb_sku where pk_id=#{id}
+    </select>
+</mapper>

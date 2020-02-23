@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nf.dao.BrandDao">
+    <select id="brandList" resultType="com.nf.entity.Brand">
+      select pk_id as id, brand_name as brandName ,brand_image as brandImage,letter
+       from tb_brand order by pk_id
+    </select>
+
+    <select id="brandListByName" parameterType="int" resultType="com.nf.entity.Brand">
+        select pk_id as id, brand_name as braNdname ,brand_image as brandImage,letter
+        from tb_brand
+        <where>
+            <if test="brandName != null and brandName!=''">
+                brand_name like "%"#{brandName}"%"
+            </if>
+       </where>
+        order by pk_id
+    </select>
+
+    <insert id="insertBrand">
+        insert  into tb_brand(pk_id,brand_name,brand_image,letter) values
+        (#{id},#{brandName},#{brandImage},#{letter})
+    </insert>
+
+    <delete id="deleteBrandById">
+        delete from tb_brand where pk_id = #{id}
+    </delete>
+
+    <update id="updateBrandById">
+        update tb_brand set brand_name=#{brandName},
+        <if test="brandImage!=null">
+        brand_image=#{brandImage},
+        </if>
+        letter=#{letter}
+        where pk_id=#{id};
+    </update>
+</mapper>

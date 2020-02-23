@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nf.dao.AttributeKeyDao">
+    <select id="attributeByCid" resultType="com.nf.entity.AttributeKey">
+        select pk_id as id,cid,attribute_name as attributeName
+        from tb_attribute_key where cid=#{cid}
+    </select>
+    <select id="attributeList" resultType="com.nf.entity.AttributeKey">
+        select pk_id as id,cid,attribute_name as attributeName
+        from tb_attribute_key order by pk_id
+    </select>
+    <insert id="insertAttr">
+        insert into tb_attribute_key(cid,attribute_name)
+        values(#{cid},#{attributeName})
+    </insert>
+    <update id="upAttribute">
+        update tb_attribute_key
+        set
+        <if test="cid!=null">
+            cid=#{cid},
+        </if>
+        <if test="attributeName!=null">
+            attribute_name=#{attributeName}
+        </if>
+        where pk_id=#{id};
+    </update>
+    <delete id="delAttrubute">
+        delete from tb_attribute_key where pk_id = #{id}
+    </delete>
+</mapper>

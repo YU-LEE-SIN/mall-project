@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nf.dao.TbSpuDao">
+    <select id="spuList"  resultType="com.nf.vo.SpuVO">
+        select b.pk_id as brandId ,b.brand_name as brandName,b.brand_image as brandImage,c.pk_id as categoryId,c.category_name as categoryName,
+       spu.pk_id as id ,spu.title,spu.sub_title as subTitle,spu.spu_image as image,
+       spu.pricing,spu.is_saleable as isSaleable,spu.create_time as createTime,
+       spu.last_update_time as lastUpdateTime
+        from tb_brand b inner join tb_spu spu on b.pk_id = spu.brand_id
+                inner join tb_category c on spu.cid=c.pk_id
+    </select>
+
+
+    <select id="spuListByTitle"  resultType="com.nf.vo.SpuVO">
+        select b.pk_id as bid ,b.brand_name as brandName,b.brand_image as brandImage,c.pk_id as cid,c.category_name as categoryName,
+        spu.title,spu.sub_title as subTitle,spu.spu_image as image,
+               spu.pricing,spu.is_saleable as isSaleable,spu.create_time as createTime,
+               spu.last_update_time as lastUpdateTime
+        from tb_brand b inner join tb_spu spu on b.pk_id = spu.brand_id
+        inner join tb_category c on spu.cid=c.pk_id
+        <where>
+            <if test="title != null">
+                spu.title like "%"#{title}"%"
+            </if>
+        </where>
+        order by spu.pk_id
+    </select>
+    <insert id="insertSpu" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_Spu( title, sub_title, spu_image, cid,
+                   brand_id, pricing, is_saleable) values
+        (#{title},#{subTitle},#{image},#{cid},#{bid},#{pricing},#{saleable})
+    </insert>
+    <delete id="deleteSpuById">
+          delete from tb_spu where pk_id = #{id}
+    </delete>
+
+    <update id="updateSpuById">
+        update tb_spu
+        set title=#{title},sub_title=#{subTitle},
+        <if test="image!=null">
+            spu_image=#{image},
+        </if>
+       cid=#{cid},brand_id=#{bid},
+       pricing=#{pricing},is_saleable=#{saleable}
+       where pk_id=#{id}
+    </update>
+
+    <select id="spuAll" resultType="com.nf.entity.TbSpu">
+        select pk_id as id,title, cid from tb_spu
+    </select>
+
+    <select id="spuListByCid"  resultType="com.nf.entity.TbSpu">
+        select pk_id as id, cid ,title,sub_title as subTitle,spu_image as image,
+       pricing,is_saleable as saleable,create_time as createTime,
+       last_update_time as lastUpdateTime
+        from  tb_spu where cid=#{cid}
+    </select>
+</mapper>
